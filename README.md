@@ -1,2 +1,2 @@
-# calculator_JS
+# Calculator
 The final project of The Odin Project course 
