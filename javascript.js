@@ -1,91 +1,124 @@
-let num1,
-  num2 = null;
+let num1 = null;
+let num2 = null;
 let operator = null;
-let displayValue = null;
-let isDisplayCleared = false;
+let displayValue = "";
+let newNumber = true; // flag to indicate if the user is entering a new number
+let isCalculated = false;
 
 const display = document.getElementById("display");
 
 function updateDisplay(value) {
-  if (display.value === "0") {
-    display.value = value;
-  } else if (num1 != null) {
-    if (isDisplayCleared === false) {
-      display.value = "";
-      isDisplayCleared = true;
-
-      console.log("isDisplayCleared");
-    }
-    display.value += value;
+  if (value === "." && display.value.includes(".")) {
+    return;
   }
+
+  if (isCalculated) {
+    num2 = null;
+    isCalculated = false;
+    displayValue = "";
+  }
+  if (newNumber) {
+    displayValue = value;
+    newNumber = false;
+  } else {
+    displayValue += value;
+  }
+  display.value = displayValue;
+}
+
+function decimalClicked() {
+  if (!displayValue.includes(".")) {
+    displayValue += ".";
+  }
+  display.value = displayValue;
 }
 
 function operatorClicked(op) {
-  num1 = parseFloat(display.value);
-  operator = op;
-  display.value = num1;
-  isDisplayCleared = false;
+  if (num1 === null) {
+    num1 = displayValue;
+    operator = op;
+    newNumber = true; // reset the flag
+  } else {
+    num2 = displayValue;
+    calculate();
+    operator = op;
+    newNumber = true; // reset the flag
+  }
 }
 
 function clearDisplay() {
-  display.value = null;
+  displayValue = "";
   num1 = null;
   num2 = null;
   operator = null;
-  isDisplayCleared = false;
+  display.value = "0";
+  newNumber = true; // reset the flag
 }
 
 function add(num1, num2) {
-  display.value = parseFloat(num1) + parseFloat(num2);
-  console.log(parseFloat(num1) + parseFloat(num2));
-  console.log("operator " + operator);
+  return parseFloat(num1) + parseFloat(num2);
 }
 
-function substract(num1, num2) {
-  display.value = parseFloat(num1) - parseFloat(num2);
-  console.log(parseFloat(num1) - parseFloat(num2));
+function subtract(num1, num2) {
+  return parseFloat(num1) - parseFloat(num2);
 }
 
 function multiply(num1, num2) {
-  display.value = parseFloat(num1) * parseFloat(num2);
-  console.log(parseFloat(num1) * parseFloat(num2));
+  return parseFloat(num1) * parseFloat(num2);
 }
 
 function divide(num1, num2) {
-  display.value = parseFloat(num1) / parseFloat(num2);
-  console.log(parseFloat(num1) / parseFloat(num2));
+  if (num2 === "0") {
+    return NaN;
+  }
+  return parseFloat(num1) / parseFloat(num2);
 }
 
 function calculate() {
-  num2 = parseFloat(display.value);
+  let result;
+  num2 = displayValue;
 
   console.log("num1: " + num1);
   console.log("num2: " + num2);
-  console.log("operator " + operator);
-  
-  if (num2 == 0 && operator == "/") {
-    return NaN;
-  }
-  switch (operator) {
-    case "+":
-      console.log("tutaj");
-      add(num1, num2);
-      break;
-    case "-":
-      substract(num1, num2);
-      break;
-    case "*":
-      multiply(num1, num2);
-      break;
-    case "/":
-      divide(num1, num2);
-      break;
-    default:
-      display.value = "ERR";
-      break;
+  console.log("operator: " + operator);
+
+  if (num1 === null || num2 === null || operator === null) {
+    return;
   }
 
+  switch (operator) {
+    case "+":
+      result = parseFloat(num1) + parseFloat(num2);
+      console.log("result: " + result);
+      break;
+    case "-":
+      result = parseFloat(num1) - parseFloat(num2);
+      console.log("result: " + result);
+      break;
+    case "*":
+      result = parseFloat(num1) * parseFloat(num2);
+      console.log("result: " + result);
+      break;
+    case "/":
+      if (num2 === "0") {
+        result = NaN;
+      } else {
+        result = parseFloat(num1) / parseFloat(num2);
+      }
+      console.log("result: " + result);
+      break;
+    default:
+      result = NaN;
+  }
+  isCalculated = true;
+  num1 = result;
+  //num2 = null;
   operator = null;
-  console.log("op " + operator);
-  isDisplayCleared = false;
+  displayValue = result.toString();
+
+  display.style.opacity = 0;
+  setTimeout(function () {
+    display.value = displayValue;
+    display.style.opacity = 1;
+  }, 100);
 }
