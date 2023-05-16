@@ -9,12 +9,21 @@
     <title>Calculator</title>
   </head>
   <body>
+    
     <div class="calculator">
       <div id="display-rectangle">
         <input type="text" id="display" value="0" readonly />
       </div>
 
       <div class="button-container">
+        <button class="button" onclick="clearDisplay()">AC</button>
+        <button class="button" onclick="toggleSign()">+/-</button>
+        <!-- <button id="backspace" class="button button-wide" onclick="backspace()">
+          Backspace
+        </button> -->
+        <button id="backspace" class="button" onclick="backspace()"></button>
+        <button class="operator" onclick="operatorClicked('/')">/</button>
+
         <button class="button" onclick="updateDisplay('7')">7</button>
         <button class="button" onclick="updateDisplay('8')">8</button>
         <button class="button" onclick="updateDisplay('9')">9</button>
@@ -27,12 +36,14 @@
         <button class="button" onclick="updateDisplay('2')">2</button>
         <button class="button" onclick="updateDisplay('3')">3</button>
         <button class="operator" onclick="operatorClicked('*')">*</button>
-        <button class="button" onclick="updateDisplay('0')">0</button>
-        <button class="operator" onclick="operatorClicked('/')">/</button>
-        <button class="button" onclick="clearDisplay()">AC</button>
-        <button class="button" onclick="decimalClicked()">.</button>
-        <button class="operator" onclick="calculate()">=</button>
-        <button class="button" onclick="toggleSign()">+/-</button>
+        <button
+          class="button button-wide lowest-row"
+          onclick="updateDisplay('0')"
+        >
+          0
+        </button>
+        <button class="button lowest-row" onclick="decimalClicked()">.</button>
+        <button class="operator lowest-row" onclick="calculate()">=</button>
       </div>
     </div>
     <script src="javascript.js"></script>
