@@ -48,6 +48,15 @@ function toggleSign() {
   }
 }
 
+function backspace() {
+  if (isCalculated) return; //If calculation was performed ignore backspace
+
+  if (displayValue.length === 1) displayValue = "0";
+  else displayValue = displayValue.slice(0, -1);
+
+  display.value = displayValue;
+}
+
 function operatorClicked(op) {
   if (num1 === null) {
     num1 = displayValue;
