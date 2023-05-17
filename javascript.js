@@ -6,6 +6,7 @@ let newNumber = true; // flag to indicate if the user is entering a new number
 let isCalculated = false;
 
 const display = document.getElementById("display");
+document.addEventListener("keydown", handleKeyPress); //event listener for when a key is pressed
 
 function updateDisplay(value) {
   if (value === "." && display.value.includes(".")) {
@@ -22,9 +23,16 @@ function updateDisplay(value) {
     displayValue = value;
     newNumber = false;
   } else {
-    if (displayValue.length >= 9) return; //checks if the number exceeds nine digits
-    displayValue += value;
+    if (displayValue === "0") {
+      displayValue = value;
+    } else if (displayValue === "-0") {
+      displayValue = "-" + value;
+    } else {
+      if (displayValue.length >= 9) return; // checks if the number exceeds nine digits
+      displayValue += value;
+    }
   }
+
   display.value = displayValue;
 }
 
@@ -154,4 +162,46 @@ function calculate() {
     display.value = displayValue;
     display.style.opacity = 1;
   }, 100);
+}
+
+function handleKeyPress(event) {
+  const key = event.key;
+
+  // Check if the pressed key is a number key
+  if (!isNaN(Number(key))) {
+    updateDisplay(key);
+    return;
+  }
+
+  // Check for other keys such as operators and special keys
+  switch (key) {
+    case "+":
+      operatorClicked("+");
+      break;
+    case "-":
+      operatorClicked("-");
+      break;
+    case "*":
+      operatorClicked("*");
+      break;
+    case "/":
+      operatorClicked("/");
+      break;
+    case "=":
+    case "Enter":
+      calculate();
+      break;
+    case ".":
+      decimalClicked();
+      break;
+    case "Backspace":
+      backspace();
+      break;
+    case "Escape":
+      clearDisplay();
+      break;
+    default:
+      // Ignore other keys
+      break;
+  }
 }
